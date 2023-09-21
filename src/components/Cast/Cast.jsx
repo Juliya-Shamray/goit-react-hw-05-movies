@@ -29,7 +29,7 @@ const Cast = () => {
 
   return (
     <StyledList>
-      {!cast.length ? (
+      {cast.length === 0 ? (
         <h2>Sorry... no cast found </h2>
       ) : (
         cast.map(({ id, profile_path, name, character }) => (
@@ -42,7 +42,7 @@ const Cast = () => {
               />
             ) : (
               <img
-                src={`'https://placekitten.com/g/200/300'`}
+                src={'https://placekitten.com/g/200/300'}
                 alt={name}
                 onError={e => {
                   e.currentTarget.src = imgNotFound;
