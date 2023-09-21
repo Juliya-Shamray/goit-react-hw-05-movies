@@ -21,7 +21,7 @@ const Reviews = () => {
   }, [movieId]);
   return (
     <>
-      {!reviews.length ? (
+      {reviews.length === 0 ? (
         <h2>Sorry... no reviews found yet</h2>
       ) : (
         <StyledList>
