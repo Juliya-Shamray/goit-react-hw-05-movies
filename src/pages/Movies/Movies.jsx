@@ -7,6 +7,7 @@ import { getMovieByQuery } from 'services/api';
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -16,11 +17,14 @@ const Movies = () => {
   useEffect(() => {
     if (!currentQuery) return;
     const fetchSearch = async () => {
+      setLoading(true);
       try {
         const res = await getMovieByQuery(currentQuery);
         setMovies(res);
       } catch (error) {
         setError(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchSearch();
@@ -31,7 +35,7 @@ const Movies = () => {
       {error && <h2>Something went wrong... Try again</h2>}
       <Form setSearchParams={setSearchParams} />
       <ol>
-        {movies.length === 0 && currentQuery && (
+        {movies.length === 0 && currentQuery && !loading && (
           <h2>No movie with title "{currentQuery}" was found, try again</h2>
         )}
         {movies.length > 0 &&

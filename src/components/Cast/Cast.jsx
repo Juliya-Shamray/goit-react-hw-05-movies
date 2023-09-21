@@ -11,15 +11,19 @@ import {
 const Cast = () => {
   const [cast, setCast] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { movieId } = useParams();
 
   useEffect(() => {
     const fetchCast = async () => {
+      setLoading(true);
       try {
         const res = await getCast(movieId);
         setCast(res);
       } catch (error) {
         setError(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCast();
@@ -29,27 +33,23 @@ const Cast = () => {
 
   return (
     <StyledList>
-      {cast.length === 0 ? (
+      {cast.length === 0 && !loading ? (
         <h2>Sorry... no cast found </h2>
       ) : (
         cast.map(({ id, profile_path, name, character }) => (
           <StyledLi key={id}>
-            {profile_path ? (
-              <img
-                src={`https://image.tmdb.org/t/p/w342/${profile_path}`}
-                alt={name}
-                width="250"
-              />
-            ) : (
-              <img
-                src={'https://placekitten.com/g/200/300'}
-                alt={name}
-                onError={e => {
-                  e.currentTarget.src = imgNotFound;
-                }}
-                width="250"
-              />
-            )}
+            <img
+              src={
+                profile_path
+                  ? `https://image.tmdb.org/t/p/w342/${profile_path}`
+                  : imgNotFound
+              }
+              alt={name}
+              onError={e => {
+                e.currentTarget.src = imgNotFound;
+              }}
+              width="250"
+            />
 
             <StyledWrapper>
               <StyledTitle>{name}</StyledTitle>
